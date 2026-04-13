@@ -203,7 +203,7 @@ def cancel_subscription(
         else:
             sub = stripe.Subscription.cancel(
                 subscription_id,
-                prorate=prorate,
+                proration_behavior="create_prorations" if prorate else "none",
             )
         return {
             "id": sub.id,
@@ -317,7 +317,9 @@ def get_revenue_metrics() -> dict:
         # Get active subscriptions for MRR
         active_subs = stripe.Subscription.list(status="active", limit=100)
         mrr_cents = 0
+        active_count = 0
         for sub in active_subs.auto_paging_iter():
+            active_count += 1
             for item in sub["items"]["data"]:
                 amount = item["price"]["unit_amount"] or 0
                 interval = item["price"].get("recurring", {}).get("interval", "month")
@@ -329,8 +331,6 @@ def get_revenue_metrics() -> dict:
                     mrr_cents += amount * 4.33
                 elif interval == "day":
                     mrr_cents += amount * 30
-
-        active_count = len(active_subs.data)
 
         # Get recently canceled subscriptions (last 30 days) for churn
         thirty_days_ago = int((datetime.now() - timedelta(days=30)).timestamp())
