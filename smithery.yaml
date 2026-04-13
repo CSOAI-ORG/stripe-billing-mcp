@@ -1,0 +1,10 @@
+name: stripe-billing-mcp
+description: "MEOK AI Labs — Manage Stripe billing operations from AI agents. Create customers, subscriptions,"
+vendor: MEOK AI Labs
+homepage: https://meok.ai
+repository: https://github.com/CSOAI-ORG/stripe-billing-mcp
+license: MIT
+categories: [Finance, Payments]
+tags: [stripe, payment-processing, billing, subscription-management, fintech]
+runtime: python
+entrypoint: server.py
