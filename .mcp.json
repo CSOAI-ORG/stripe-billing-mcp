@@ -1,27 +1,160 @@
 {
   "name": "stripe-billing-mcp",
-  "description": "MEOK AI Labs \u2014 Manage Stripe billing operations from AI agents. Create customers, subscriptions,",
-  "vendor": "MEOK AI Labs",
-  "homepage": "https://meok.ai",
-  "repository": "https://github.com/CSOAI-ORG/stripe-billing-mcp",
-  "runtime": "python",
-  "entrypoint": "server.py",
+  "description": "> **By [MEOK AI Labs](https://meok.ai)** \u2014 Sovereign AI tools for everyone.",
+  "version": "1.0.0",
   "tools": [
-    "create_customer",
-    "search_customers",
-    "create_subscription",
-    "cancel_subscription",
-    "list_invoices",
-    "create_checkout_session",
-    "get_revenue_metrics",
-    "get_balance"
-  ],
-  "categories": [
-    "Finance",
-    "Payments"
-  ],
-  "pricing": {
-    "free": "50 calls/day",
-    "pro": "$9/mo"
-  }
+    {
+      "name": "create_customer",
+      "description": "Create a new Stripe customer.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "object",
+            "nullable": true
+          }
+        },
+        "required": [
+          "name",
+          "email"
+        ]
+      }
+    },
+    {
+      "name": "search_customers",
+      "description": "Search Stripe customers by email or name.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      }
+    },
+    {
+      "name": "create_subscription",
+      "description": "Subscribe a customer to a price/plan.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "price_id": {
+            "type": "string"
+          },
+          "trial_days": {
+            "type": "integer",
+            "nullable": true
+          }
+        },
+        "required": [
+          "customer_id",
+          "price_id"
+        ]
+      }
+    },
+    {
+      "name": "cancel_subscription",
+      "description": "Cancel a Stripe subscription.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string"
+          },
+          "at_period_end": {
+            "type": "boolean"
+          },
+          "prorate": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "subscription_id"
+        ]
+      }
+    },
+    {
+      "name": "list_invoices",
+      "description": "List recent invoices for a customer.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "customer_id"
+        ]
+      }
+    },
+    {
+      "name": "create_checkout_session",
+      "description": "Generate a Stripe Checkout URL for a price.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "price_id": {
+            "type": "string"
+          },
+          "success_url": {
+            "type": "string"
+          },
+          "cancel_url": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string"
+          },
+          "customer_email": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "price_id"
+        ]
+      }
+    },
+    {
+      "name": "get_revenue_metrics",
+      "description": "Calculate MRR, ARR, churn rate, and LTV from live Stripe data.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "get_balance",
+      "description": "Get current Stripe account balance and recent payouts.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  ]
 }

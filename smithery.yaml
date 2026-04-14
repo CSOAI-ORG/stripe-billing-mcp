@@ -1,10 +1,86 @@
 name: stripe-billing-mcp
-description: "MEOK AI Labs — Manage Stripe billing operations from AI agents. Create customers, subscriptions,"
-vendor: MEOK AI Labs
-homepage: https://meok.ai
-repository: https://github.com/CSOAI-ORG/stripe-billing-mcp
-license: MIT
-categories: [Finance, Payments]
-tags: [stripe, payment-processing, billing, subscription-management, fintech]
-runtime: python
-entrypoint: server.py
+description: "> **By [MEOK AI Labs](https://meok.ai)** \u2014 Sovereign AI tools for\
+  \ everyone."
+version: 1.0.0
+tools:
+- name: create_customer
+  description: Create a new Stripe customer.
+  parameters:
+  - name: name
+    type: string
+    required: true
+  - name: email
+    type: string
+    required: true
+  - name: metadata
+    type: object
+    required: false
+- name: search_customers
+  description: Search Stripe customers by email or name.
+  parameters:
+  - name: query
+    type: string
+    required: true
+  - name: limit
+    type: integer
+    required: false
+- name: create_subscription
+  description: Subscribe a customer to a price/plan.
+  parameters:
+  - name: customer_id
+    type: string
+    required: true
+  - name: price_id
+    type: string
+    required: true
+  - name: trial_days
+    type: integer
+    required: false
+- name: cancel_subscription
+  description: Cancel a Stripe subscription.
+  parameters:
+  - name: subscription_id
+    type: string
+    required: true
+  - name: at_period_end
+    type: boolean
+    required: false
+  - name: prorate
+    type: boolean
+    required: false
+- name: list_invoices
+  description: List recent invoices for a customer.
+  parameters:
+  - name: customer_id
+    type: string
+    required: true
+  - name: limit
+    type: integer
+    required: false
+  - name: status
+    type: string
+    required: false
+- name: create_checkout_session
+  description: Generate a Stripe Checkout URL for a price.
+  parameters:
+  - name: price_id
+    type: string
+    required: true
+  - name: success_url
+    type: string
+    required: false
+  - name: cancel_url
+    type: string
+    required: false
+  - name: mode
+    type: string
+    required: false
+  - name: customer_email
+    type: string
+    required: false
+- name: get_revenue_metrics
+  description: Calculate MRR, ARR, churn rate, and LTV from live Stripe data.
+  parameters: []
+- name: get_balance
+  description: Get current Stripe account balance and recent payouts.
+  parameters: []

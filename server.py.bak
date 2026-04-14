@@ -9,11 +9,7 @@ Install: pip install mcp stripe
 Run:     STRIPE_SECRET_KEY=sk_... python server.py
 """
 
-
-import sys, os
-sys.path.insert(0, os.path.expanduser('~/clawd/meok-labs-engine/shared'))
-from auth_middleware import check_access
-
+import os
 import json
 from datetime import datetime, timedelta
 from typing import Optional
@@ -25,11 +21,8 @@ from mcp.server.fastmcp import FastMCP
 # ---------------------------------------------------------------------------
 _stripe_key = os.environ.get("STRIPE_SECRET_KEY", "")
 
-try:
-    import stripe
-except ImportError:
-    stripe = None
-if _stripe_key and stripe is not None:
+import stripe
+if _stripe_key:
     stripe.api_key = _stripe_key
 
 # Safety: never expose the key — only show last 4 chars
@@ -67,7 +60,7 @@ mcp = FastMCP("stripe-billing")
 def create_customer(
     name: str,
     email: str,
-    metadata: Optional[dict] = None, api_key: str = "") -> dict:
+    metadata: Optional[dict] = None) -> dict:
     """Create a new Stripe customer.
 
     Args:
@@ -75,10 +68,6 @@ def create_customer(
         email: Customer email address
         metadata: Optional key-value metadata (e.g. {"plan": "pro", "source": "website"})
     """
-    allowed, msg, tier = check_access(api_key)
-    if not allowed:
-        return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
-
     err = _check_destructive_limit("create_customer")
     if err:
         return {"error": err}
@@ -102,17 +91,13 @@ def create_customer(
 @mcp.tool()
 def search_customers(
     query: str,
-    limit: int = 10, api_key: str = "") -> dict:
+    limit: int = 10) -> dict:
     """Search Stripe customers by email or name.
 
     Args:
         query: Email address or name to search for
         limit: Max results to return (default 10, max 100)
     """
-    allowed, msg, tier = check_access(api_key)
-    if not allowed:
-        return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
-
     try:
         limit = min(max(limit, 1), 100)
         # Stripe Search API uses a query language
@@ -141,7 +126,7 @@ def search_customers(
 def create_subscription(
     customer_id: str,
     price_id: str,
-    trial_days: Optional[int] = None, api_key: str = "") -> dict:
+    trial_days: Optional[int] = None) -> dict:
     """Subscribe a customer to a price/plan.
 
     Args:
@@ -149,10 +134,6 @@ def create_subscription(
         price_id: Stripe price ID (price_...)
         trial_days: Optional trial period in days
     """
-    allowed, msg, tier = check_access(api_key)
-    if not allowed:
-        return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
-
     err = _check_destructive_limit("create_subscription")
     if err:
         return {"error": err}
@@ -192,7 +173,7 @@ def create_subscription(
 def cancel_subscription(
     subscription_id: str,
     at_period_end: bool = True,
-    prorate: bool = True, api_key: str = "") -> dict:
+    prorate: bool = True) -> dict:
     """Cancel a Stripe subscription.
 
     Args:
@@ -200,10 +181,6 @@ def cancel_subscription(
         at_period_end: If True, cancel at end of billing period (default). If False, cancel immediately.
         prorate: Whether to prorate the final invoice (default True)
     """
-    allowed, msg, tier = check_access(api_key)
-    if not allowed:
-        return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
-
     err = _check_destructive_limit("cancel_subscription")
     if err:
         return {"error": err}
@@ -233,7 +210,7 @@ def cancel_subscription(
 def list_invoices(
     customer_id: str,
     limit: int = 10,
-    status: Optional[str] = None, api_key: str = "") -> dict:
+    status: Optional[str] = None) -> dict:
     """List recent invoices for a customer.
 
     Args:
@@ -241,10 +218,6 @@ def list_invoices(
         limit: Number of invoices to return (default 10, max 100)
         status: Filter by status: draft, open, paid, uncollectible, void (optional)
     """
-    allowed, msg, tier = check_access(api_key)
-    if not allowed:
-        return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
-
     try:
         limit = min(max(limit, 1), 100)
         params = {"customer": customer_id, "limit": limit}
@@ -281,7 +254,7 @@ def create_checkout_session(
     success_url: str = "https://example.com/success",
     cancel_url: str = "https://example.com/cancel",
     mode: str = "subscription",
-    customer_email: Optional[str] = None, api_key: str = "") -> dict:
+    customer_email: Optional[str] = None) -> dict:
     """Generate a Stripe Checkout URL for a price.
 
     Args:
@@ -291,10 +264,6 @@ def create_checkout_session(
         mode: Checkout mode — "subscription" or "payment" (one-time)
         customer_email: Pre-fill the customer's email in checkout
     """
-    allowed, msg, tier = check_access(api_key)
-    if not allowed:
-        return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
-
     err = _check_destructive_limit("create_checkout")
     if err:
         return {"error": err}
@@ -322,7 +291,7 @@ def create_checkout_session(
 
 
 @mcp.tool()
-def get_revenue_metrics(api_key: str = "") -> dict:
+def get_revenue_metrics() -> dict:
     """Calculate MRR, ARR, churn rate, and LTV from live Stripe data.
 
     Fetches active/canceled subscriptions and computes:
@@ -332,10 +301,6 @@ def get_revenue_metrics(api_key: str = "") -> dict:
     - Average revenue per customer
     - Estimated LTV
     """
-    allowed, msg, tier = check_access(api_key)
-    if not allowed:
-        return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
-
     try:
         # Get active subscriptions for MRR
         active_subs = stripe.Subscription.list(status="active", limit=100)
@@ -389,15 +354,11 @@ def get_revenue_metrics(api_key: str = "") -> dict:
 
 
 @mcp.tool()
-def get_balance(api_key: str = "") -> dict:
+def get_balance() -> dict:
     """Get current Stripe account balance and recent payouts.
 
     Returns available and pending balances plus the last 5 payouts.
     """
-    allowed, msg, tier = check_access(api_key)
-    if not allowed:
-        return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
-
     try:
         balance = stripe.Balance.retrieve()
         available = [
