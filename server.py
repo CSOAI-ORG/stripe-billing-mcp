@@ -20,14 +20,10 @@ from mcp.server.fastmcp import FastMCP
 # Stripe client setup
 # ---------------------------------------------------------------------------
 _stripe_key = os.environ.get("STRIPE_SECRET_KEY", "")
-if not _stripe_key:
-    raise EnvironmentError(
-        "STRIPE_SECRET_KEY environment variable is required. "
-        "Get your key at https://dashboard.stripe.com/apikeys"
-    )
 
 import stripe
-stripe.api_key = _stripe_key
+if _stripe_key:
+    stripe.api_key = _stripe_key
 
 # Safety: never expose the key — only show last 4 chars
 _masked_key = f"sk_...{_stripe_key[-4:]}"
