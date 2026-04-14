@@ -64,8 +64,7 @@ mcp = FastMCP("stripe-billing")
 def create_customer(
     name: str,
     email: str,
-    metadata: Optional[dict] = None,
-) -> dict:
+    metadata: Optional[dict] = None) -> dict:
     """Create a new Stripe customer.
 
     Args:
@@ -96,8 +95,7 @@ def create_customer(
 @mcp.tool()
 def search_customers(
     query: str,
-    limit: int = 10,
-) -> dict:
+    limit: int = 10) -> dict:
     """Search Stripe customers by email or name.
 
     Args:
@@ -132,8 +130,7 @@ def search_customers(
 def create_subscription(
     customer_id: str,
     price_id: str,
-    trial_days: Optional[int] = None,
-) -> dict:
+    trial_days: Optional[int] = None) -> dict:
     """Subscribe a customer to a price/plan.
 
     Args:
@@ -180,8 +177,7 @@ def create_subscription(
 def cancel_subscription(
     subscription_id: str,
     at_period_end: bool = True,
-    prorate: bool = True,
-) -> dict:
+    prorate: bool = True) -> dict:
     """Cancel a Stripe subscription.
 
     Args:
@@ -198,13 +194,11 @@ def cancel_subscription(
             sub = stripe.Subscription.modify(
                 subscription_id,
                 cancel_at_period_end=True,
-                proration_behavior="create_prorations" if prorate else "none",
-            )
+                proration_behavior="create_prorations" if prorate else "none")
         else:
             sub = stripe.Subscription.cancel(
                 subscription_id,
-                proration_behavior="create_prorations" if prorate else "none",
-            )
+                proration_behavior="create_prorations" if prorate else "none")
         return {
             "id": sub.id,
             "status": sub.status,
@@ -220,8 +214,7 @@ def cancel_subscription(
 def list_invoices(
     customer_id: str,
     limit: int = 10,
-    status: Optional[str] = None,
-) -> dict:
+    status: Optional[str] = None) -> dict:
     """List recent invoices for a customer.
 
     Args:
@@ -265,8 +258,7 @@ def create_checkout_session(
     success_url: str = "https://example.com/success",
     cancel_url: str = "https://example.com/cancel",
     mode: str = "subscription",
-    customer_email: Optional[str] = None,
-) -> dict:
+    customer_email: Optional[str] = None) -> dict:
     """Generate a Stripe Checkout URL for a price.
 
     Args:
@@ -337,8 +329,7 @@ def get_revenue_metrics() -> dict:
         canceled_subs = stripe.Subscription.list(
             status="canceled",
             created={"gte": thirty_days_ago},
-            limit=100,
-        )
+            limit=100)
         canceled_count = len(canceled_subs.data)
 
         # Compute metrics
