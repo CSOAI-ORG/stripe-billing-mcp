@@ -1,0 +1,10 @@
+{
+  "name": "stripe-billing-mcp",
+  "description": "MEOK AI Labs \u2014 stripe-billing-mcp",
+  "vendor": "MEOK AI Labs",
+  "homepage": "https://meok.ai",
+  "repository": "https://github.com/CSOAI-ORG/stripe-billing-mcp",
+  "license": "MIT",
+  "runtime": "python",
+  "entryPoint": "mcp-wrapper.py"
+}
