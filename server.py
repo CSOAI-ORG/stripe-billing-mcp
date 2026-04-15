@@ -20,6 +20,16 @@ from typing import Optional
 from collections import defaultdict
 from mcp.server.fastmcp import FastMCP
 
+
+FREE_DAILY_LIMIT = 15
+_usage = defaultdict(list)
+def _rl(c="anon"):
+    now = datetime.now(timezone.utc)
+    _usage[c] = [t for t in _usage[c] if (now-t).total_seconds() < 86400]
+    if len(_usage[c]) >= FREE_DAILY_LIMIT: return json.dumps({"error": f"Limit {FREE_DAILY_LIMIT}/day"})
+    _usage[c].append(now); return None
+
+
 # ---------------------------------------------------------------------------
 # Stripe client setup
 # ---------------------------------------------------------------------------
@@ -78,6 +88,7 @@ def create_customer(
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
+    if err := _rl(): return err
 
     err = _check_destructive_limit("create_customer")
     if err:
@@ -112,6 +123,7 @@ def search_customers(
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
+    if err := _rl(): return err
 
     try:
         limit = min(max(limit, 1), 100)
@@ -152,6 +164,7 @@ def create_subscription(
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
+    if err := _rl(): return err
 
     err = _check_destructive_limit("create_subscription")
     if err:
@@ -203,6 +216,7 @@ def cancel_subscription(
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
+    if err := _rl(): return err
 
     err = _check_destructive_limit("cancel_subscription")
     if err:
@@ -244,6 +258,7 @@ def list_invoices(
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
+    if err := _rl(): return err
 
     try:
         limit = min(max(limit, 1), 100)
@@ -294,6 +309,7 @@ def create_checkout_session(
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
+    if err := _rl(): return err
 
     err = _check_destructive_limit("create_checkout")
     if err:
@@ -335,6 +351,7 @@ def get_revenue_metrics(api_key: str = "") -> dict:
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
+    if err := _rl(): return err
 
     try:
         # Get active subscriptions for MRR
@@ -397,6 +414,7 @@ def get_balance(api_key: str = "") -> dict:
     allowed, msg, tier = check_access(api_key)
     if not allowed:
         return {"error": msg, "upgrade_url": "https://meok.ai/pricing"}
+    if err := _rl(): return err
 
     try:
         balance = stripe.Balance.retrieve()
