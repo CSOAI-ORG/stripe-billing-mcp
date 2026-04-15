@@ -1,0 +1,68 @@
+{
+  "name": "stripe-billing",
+  "description": "Stripe Billing tools powered by MEOK AI Labs.",
+  "version": "1.0.0",
+  "protocol_version": "2025-11-25",
+  "publisher": {
+    "name": "MEOK AI Labs",
+    "url": "https://meok.ai",
+    "email": "nicholas@meok.ai"
+  },
+  "repository": "https://github.com/CSOAI-ORG/stripe-billing-mcp",
+  "license": "MIT",
+  "transport": [
+    "stdio",
+    "streamable-http"
+  ],
+  "authentication": {
+    "type": "api-key",
+    "free_tier": true,
+    "free_limit": "15 calls/day"
+  },
+  "tools": [
+    {
+      "name": "create_customer",
+      "description": "Create a new Stripe customer."
+    },
+    {
+      "name": "search_customers",
+      "description": "Search Stripe customers by email or name."
+    },
+    {
+      "name": "create_subscription",
+      "description": "Subscribe a customer to a price/plan."
+    },
+    {
+      "name": "cancel_subscription",
+      "description": "Cancel a Stripe subscription."
+    },
+    {
+      "name": "list_invoices",
+      "description": "List recent invoices for a customer."
+    },
+    {
+      "name": "create_checkout_session",
+      "description": "Generate a Stripe Checkout URL for a price."
+    },
+    {
+      "name": "get_revenue_metrics",
+      "description": "Calculate MRR, ARR, churn rate, and LTV from live Stripe data."
+    },
+    {
+      "name": "get_balance",
+      "description": "Get current Stripe account balance and recent payouts."
+    }
+  ],
+  "categories": [
+    "AI & Machine Learning"
+  ],
+  "pricing": {
+    "free": {
+      "calls_per_day": 15
+    },
+    "pro": {
+      "price": "$29/month",
+      "url": "https://meok.ai/pricing"
+    }
+  }
+}
