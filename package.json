@@ -1,7 +1,7 @@
 {
   "name": "stripe-billing-mcp",
   "version": "1.0.0",
-  "description": "MEOK AI Labs \u2014 stripe billing MCP Server",
+  "description": "Stripe Billing automation via MCP. Includes create customer, search customers, create subscription. By MEOK AI Labs.",
   "main": "server.py",
   "mcp": {
     "name": "stripe billing",

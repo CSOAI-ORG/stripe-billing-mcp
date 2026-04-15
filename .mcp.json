@@ -1,6 +1,6 @@
 {
   "name": "stripe-billing-mcp",
-  "description": "> **By [MEOK AI Labs](https://meok.ai)** \u2014 MEOK AI Labs MCP Server",
+  "description": "Stripe Billing automation via MCP. Includes create customer, search customers, create subscription. By MEOK AI Labs.",
   "version": "1.0.0",
   "tools": [
     {
