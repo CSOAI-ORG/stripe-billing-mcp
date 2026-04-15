@@ -60,7 +60,7 @@ def _check_destructive_limit(operation: str, caller: str = "anonymous") -> Optio
 # ---------------------------------------------------------------------------
 # MCP Server
 # ---------------------------------------------------------------------------
-mcp = FastMCP("stripe-billing")
+mcp = FastMCP("stripe-billing", instructions="MEOK AI Labs MCP Server")
 
 
 @mcp.tool()
