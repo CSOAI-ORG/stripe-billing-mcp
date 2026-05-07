@@ -1,3 +1,5 @@
+[![stripe-billing-mcp MCP server](https://glama.ai/mcp/servers/CSOAI-ORG/stripe-billing-mcp/badges/card.svg)](https://glama.ai/mcp/servers/CSOAI-ORG/stripe-billing-mcp)
+
 # Stripe Billing MCP Server
 
 > **By [MEOK AI Labs](https://meok.ai)** — Sovereign AI tools for everyone.
