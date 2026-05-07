@@ -61,3 +61,4 @@ This is one of 255+ MCP servers by MEOK AI Labs. Browse all at [meok.ai](https:/
 
 ---
 **MEOK AI Labs** | [meok.ai](https://meok.ai) | nicholas@meok.ai | United Kingdom
+<!-- mcp-name: io.github.CSOAI-ORG/stripe-billing-mcp -->
