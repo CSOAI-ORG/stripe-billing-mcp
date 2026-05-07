@@ -1,3 +1,7 @@
+[![stripe-billing-mcp MCP server](https://glama.ai/mcp/servers/CSOAI-ORG/stripe-billing-mcp/badges/score.svg)](https://glama.ai/mcp/servers/CSOAI-ORG/stripe-billing-mcp)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-Published-green)](https://registry.modelcontextprotocol.io)
+[![PyPI](https://img.shields.io/pypi/v/stripe-billing-mcp)](https://pypi.org/project/stripe-billing-mcp/)
+
 [![stripe-billing-mcp MCP server](https://glama.ai/mcp/servers/CSOAI-ORG/stripe-billing-mcp/badges/card.svg)](https://glama.ai/mcp/servers/CSOAI-ORG/stripe-billing-mcp)
 
 # Stripe Billing MCP Server
