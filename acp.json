@@ -1,0 +1,26 @@
+{
+  "acpVersion": "0.1",
+  "agent": {
+    "name": "stripe-billing-mcp",
+    "description": "Stripe Billing MCP Server by MEOK AI Labs",
+    "version": "1.0.2",
+    "provider": "MEOK AI Labs",
+    "interfaces": [
+      {
+        "type": "mcp",
+        "transport": "stdio",
+        "package": "stripe-billing-mcp"
+      }
+    ],
+    "capabilities": [
+      "create_customer",
+      "search_customers",
+      "create_subscription",
+      "cancel_subscription",
+      "list_invoices",
+      "create_checkout_session",
+      "get_revenue_metrics",
+      "get_balance"
+    ]
+  }
+}

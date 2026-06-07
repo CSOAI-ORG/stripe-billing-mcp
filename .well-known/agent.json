@@ -1,0 +1,95 @@
+{
+  "name": "stripe-billing-mcp",
+  "description": "Stripe Billing MCP Server by MEOK AI Labs",
+  "url": "https://proofof.ai/scorecard/stripe-billing-mcp.html",
+  "version": "1.0.2",
+  "protocolVersion": "0.2.0",
+  "provider": {
+    "organization": "MEOK AI Labs",
+    "url": "https://meok.ai"
+  },
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false
+  },
+  "defaultInputModes": [
+    "text"
+  ],
+  "defaultOutputModes": [
+    "text"
+  ],
+  "skills": [
+    {
+      "id": "create_customer",
+      "name": "Create Customer",
+      "description": "create_customer via stripe-billing-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "search_customers",
+      "name": "Search Customers",
+      "description": "search_customers via stripe-billing-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "create_subscription",
+      "name": "Create Subscription",
+      "description": "create_subscription via stripe-billing-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "cancel_subscription",
+      "name": "Cancel Subscription",
+      "description": "cancel_subscription via stripe-billing-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "list_invoices",
+      "name": "List Invoices",
+      "description": "list_invoices via stripe-billing-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "create_checkout_session",
+      "name": "Create Checkout Session",
+      "description": "create_checkout_session via stripe-billing-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_revenue_metrics",
+      "name": "Get Revenue Metrics",
+      "description": "get_revenue_metrics via stripe-billing-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    },
+    {
+      "id": "get_balance",
+      "name": "Get Balance",
+      "description": "get_balance via stripe-billing-mcp",
+      "tags": [
+        "mcp",
+        "compliance"
+      ]
+    }
+  ]
+}
