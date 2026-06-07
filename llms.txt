@@ -1,0 +1,45 @@
+# stripe-billing-mcp
+# > **By [MEOK AI Labs](https://meok.ai)** — Sovereign AI tools for everyone.
+
+## Install
+```bash
+pip install stripe-billing-mcp
+```
+
+## Auth & Rate Limits
+- Free tier: 10 calls/day. No API key required.
+- Pro tier (£79/mo): unlimited + signed attestations.
+- Enterprise (£1,499/mo): white-label.
+
+## Tools
+
+### `create_customer`
+Create a new Stripe customer.
+
+### `search_customers`
+Search Stripe customers by email or name.
+
+### `create_subscription`
+Subscribe a customer to a price/plan.
+
+### `cancel_subscription`
+Cancel a Stripe subscription.
+
+### `list_invoices`
+List recent invoices for a customer.
+
+### `create_checkout_session`
+Generate a Stripe Checkout URL for a price.
+
+### `get_revenue_metrics`
+Calculate MRR, ARR, churn rate, and LTV from live Stripe data.
+
+### `get_balance`
+Get current Stripe account balance and recent payouts.
+
+
+## Maintainer
+MEOK AI Labs · hello@meok.ai · https://meok.ai · MIT licensed
+
+## Pairs with
+Governance moat: pair this tool with any of MEOK's 38 governance MCPs (EU AI Act, DORA, NIS2, CRA, GDPR, ISO 42001, etc.) for full compliance coverage.

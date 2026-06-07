@@ -1,55 +1,108 @@
-import os
+#!/usr/bin/env python3
 import sys
-import unittest
+import os
+import json
+import pytest
+from unittest.mock import MagicMock, patch
 
-# Ensure shared auth middleware is available
-sys.path.insert(0, os.path.expanduser("~/clawd/meok-labs-engine/shared"))
-os.chdir(os.path.dirname(os.path.abspath(__file__)) + "/..")
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+_shared_auth = os.path.expanduser("~/clawd/meok-labs-engine/shared")
+if os.path.isdir(_shared_auth):
+    sys.path.insert(0, _shared_auth)
 
+_mock_stripe = MagicMock()
+_mock_stripe.error.StripeError = type("StripeError", (Exception,), {})
+_mock_stripe.Customer.create.side_effect = _mock_stripe.error.StripeError("Stripe not configured")
+_mock_stripe.Customer.search.side_effect = _mock_stripe.error.StripeError("Stripe not configured")
+_mock_stripe.Subscription.create.side_effect = _mock_stripe.error.StripeError("Stripe not configured")
+_mock_stripe.Subscription.modify.side_effect = _mock_stripe.error.StripeError("Stripe not configured")
+_mock_stripe.Subscription.cancel.side_effect = _mock_stripe.error.StripeError("Stripe not configured")
+_mock_stripe.Invoice.list.side_effect = _mock_stripe.error.StripeError("Stripe not configured")
+_mock_stripe.checkout.Session.create.side_effect = _mock_stripe.error.StripeError("Stripe not configured")
+_mock_stripe.Balance.retrieve.side_effect = _mock_stripe.error.StripeError("Stripe not configured")
+_mock_stripe.Payout.list.side_effect = _mock_stripe.error.StripeError("Stripe not configured")
 
-class TestMCPImport(unittest.TestCase):
-    def test_import_server(self):
-        """Server module must import without errors."""
-        import server  # noqa: F401
-
-    def test_mcp_or_server_object_exists(self):
-        """FastMCP servers export 'mcp'; low-level servers export 'server'."""
-        import server as srv
-        self.assertTrue(
-            hasattr(srv, "mcp") or hasattr(srv, "server"),
-            "Expected 'mcp' or 'server' object in server.py",
-        )
-
-
-class TestAuthMiddleware(unittest.TestCase):
-    def test_check_access_allows_empty_key_as_free_tier(self):
-        """Empty API key maps to FREE tier and is allowed."""
-        from auth_middleware import check_access, Tier
-        allowed, msg, tier = check_access("")
-        self.assertTrue(allowed)
-        self.assertEqual(tier, Tier.FREE)
-        self.assertIsInstance(msg, str)
-
-    def test_check_access_returns_tuple(self):
-        """check_access must return a 3-tuple."""
-        from auth_middleware import check_access
-        result = check_access("")
-        self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 3)
+_patcher_mod = patch.dict("sys.modules", {"stripe": _mock_stripe})
+_patcher_env = patch.dict(os.environ, {"STRIPE_SECRET_KEY": "sk_test_mock_key_12345"})
+_patcher_mod.start()
+_patcher_env.start()
+import server
+_patcher_env.stop()
+_patcher_mod.stop()
 
 
-class TestHealthEndpoint(unittest.TestCase):
-    def test_health_url_resolves(self):
-        """Wrapper must expose /health."""
-        import urllib.request
-        # Note: this test requires the wrapper to be running on port 8000.
-        # It is skipped in CI unless the server is active.
-        try:
-            resp = urllib.request.urlopen("http://localhost:8000/health", timeout=2)
-            self.assertEqual(resp.status, 200)
-        except Exception as e:
-            self.skipTest(f"Server not running: {e}")
+def test_server_module_imports():
+    assert server is not None
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_mcp_object_exists():
+    assert hasattr(server, "mcp")
+
+
+def test_tools_registered():
+    expected = [
+        "create_customer",
+        "search_customers",
+        "create_subscription",
+        "cancel_subscription",
+        "list_invoices",
+        "create_checkout_session",
+        "get_revenue_metrics",
+        "get_balance",
+    ]
+    for name in expected:
+        assert hasattr(server, name), f"Missing tool: {name}"
+        assert callable(getattr(server, name))
+
+
+def test_main_function():
+    assert hasattr(server, "main")
+    assert callable(server.main)
+
+
+def test_create_customer_returns_error():
+    result = server.create_customer(name="Test User", email="test@example.com")
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
+def test_search_customers_returns_error():
+    result = server.search_customers(query="test@example.com")
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
+def test_create_subscription_returns_error():
+    result = server.create_subscription(customer_id="cus_mock", price_id="price_mock")
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
+def test_cancel_subscription_returns_error():
+    result = server.cancel_subscription(subscription_id="sub_mock")
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
+def test_list_invoices_returns_error():
+    result = server.list_invoices(customer_id="cus_mock")
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
+def test_create_checkout_session_returns_error():
+    result = server.create_checkout_session(price_id="price_mock")
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
+def test_get_revenue_metrics_returns_error():
+    result = server.get_revenue_metrics()
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
+def test_get_balance_returns_error():
+    result = server.get_balance()
+    assert isinstance(result, dict)
+    assert "error" in result

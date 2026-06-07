@@ -1,0 +1,9 @@
+# stripe-billing-mcp - Auto-trigger Rules
+
+When the user asks about stripe billing, use stripe-billing-mcp tools: create_customer, search_customers, create_subscription, cancel_subscription, list_invoices
+
+> **By [MEOK AI Labs](https://meok.ai)** — Sovereign AI tools for everyone.
+
+Install: `pip install stripe-billing-mcp`
+
+By MEOK AI Labs — MIT licensed.

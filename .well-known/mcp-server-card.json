@@ -1,0 +1,6 @@
+{
+  "serverInfo": { "name": "stripe-billing-mcp", "version": "1.0.0" },
+  "tools": [
+    {"name": "create_customer", "description": "MCP tool from MEOK AI Labs"}, {"name": "search_customers", "description": "MCP tool from MEOK AI Labs"}, {"name": "create_subscription", "description": "MCP tool from MEOK AI Labs"}, {"name": "cancel_subscription", "description": "MCP tool from MEOK AI Labs"}, {"name": "list_invoices", "description": "MCP tool from MEOK AI Labs"}
+  ]
+}
