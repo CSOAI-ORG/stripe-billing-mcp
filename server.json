@@ -4,9 +4,8 @@
   "version": "1.0.5",
   "description": "Stripe Billing MCP Server by MEOK AI Labs",
   "repository": {
-    "type": "git",
     "url": "https://github.com/CSOAI-ORG/stripe-billing-mcp",
-    "source": "https://github.com/CSOAI-ORG/stripe-billing-mcp"
+    "source": "github"
   },
   "packages": [
     {
